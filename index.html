@@ -252,6 +252,26 @@ function next(){
  load();
 }
 load();
+</script><section id="daily-progress" style="margin:20px;padding:20px;background:#eef2ff;border-radius:16px;">
+  <h2>📚 আমার শেখার অগ্রগতি</h2>
+  <p>আজকের শেখা: <span id="learned-count">0</span>টি শব্দ</p>
+  <button onclick="addLearnedWord()">আজ একটি শব্দ শিখেছি</button>
+</section>
+
+<script>
+let learnedCount = Number(localStorage.getItem("learnedCount") || 0);
+
+function updateProgress() {
+  document.getElementById("learned-count").textContent = learnedCount;
+}
+
+function addLearnedWord() {
+  learnedCount++;
+  localStorage.setItem("learnedCount", learnedCount);
+  updateProgress();
+}
+
+updateProgress();
 </script>
 </body>
 </html>

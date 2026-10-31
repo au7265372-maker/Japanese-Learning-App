@@ -340,6 +340,75 @@ function nextKanaQuestion() {
   showKanaQuestion();
 }
 </script>
+<section id="katakana-quiz" style="margin:20px;padding:20px;background:#fff0f5;border-radius:16px;">
+  <h2>🇯🇵 কাতাকানা কুইজ</h2>
+  <p id="kata-question">কুইজ শুরু করতে নিচের বাটনে চাপো।</p>
+  <div id="kata-options"></div>
+  <p id="kata-result"></p>
+  <button onclick="startKataQuiz()">কুইজ শুরু করো</button>
+  <p id="kata-score"></p>
+</section>
+
+<script>
+const kataQuestions = [
+  {q:"ア এর উচ্চারণ কী?",a:["আ","ই","উ","এ"],correct:"আ"},
+  {q:"カ এর উচ্চারণ কী?",a:["কা","কি","কু","কে"],correct:"কা"},
+  {q:"キ এর উচ্চারণ কী?",a:["কা","কি","কু","কো"],correct:"কি"},
+  {q:"ヌ এর উচ্চারণ কী?",a:["না","নি","নু","নে"],correct:"নু"},
+  {q:"モ এর উচ্চারণ কী?",a:["মা","মি","মো","মু"],correct:"মো"}
+];
+
+let kataIndex = 0;
+let kataScore = 0;
+
+function startKataQuiz() {
+  kataIndex = 0;
+  kataScore = 0;
+  document.getElementById("kata-score").textContent = "";
+  showKataQuestion();
+}
+
+function showKataQuestion() {
+  if (kataIndex >= kataQuestions.length) {
+    document.getElementById("kata-question").textContent = "কুইজ শেষ!";
+    document.getElementById("kata-options").innerHTML = "";
+    document.getElementById("kata-result").textContent = "";
+    document.getElementById("kata-score").textContent =
+      "তোমার নম্বর: " + kataScore + " / 5";
+    return;
+  }
+
+  const q = kataQuestions[kataIndex];
+  document.getElementById("kata-question").textContent =
+    (kataIndex + 1) + ". " + q.q;
+  document.getElementById("kata-result").textContent = "";
+
+  document.getElementById("kata-options").innerHTML = q.a.map(option =>
+    `<button style="margin:5px;padding:10px;" onclick="answerKata('${option}')">${option}</button>`
+  ).join("");
+}
+
+function answerKata(answer) {
+  const q = kataQuestions[kataIndex];
+
+  if (answer === q.correct) {
+    kataScore++;
+    document.getElementById("kata-result").textContent = "✅ সঠিক উত্তর!";
+  } else {
+    document.getElementById("kata-result").textContent =
+      "❌ সঠিক উত্তর: " + q.correct;
+  }
+
+  document.getElementById("kata-options").innerHTML =
+    '<button onclick="nextKataQuestion()">পরের প্রশ্ন</button>';
+}
+
+function nextKataQuestion() {
+  kataIndex++;
+  showKataQuestion();
+}
+</script>
+
 
 </body>
 </html>

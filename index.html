@@ -410,5 +410,119 @@ function nextKataQuestion() {
 </script>
 
 
+<!-- Supabase Account System -->
+<section id="account-section" style="margin:20px;padding:20px;background:#eef2ff;border-radius:16px;">
+  <h2>🇯🇵 Japanese Learning Account</h2>
+
+  <div id="auth-form">
+    <input id="auth-email" type="email" placeholder="তোমার ইমেইল"
+      style="display:block;width:95%;padding:12px;margin:10px 0;">
+
+    <input id="auth-password" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)"
+      style="display:block;width:95%;padding:12px;margin:10px 0;">
+
+    <button onclick="signUpUser()">Sign Up</button>
+    <button onclick="loginUser()">Login</button>
+  </div>
+
+  <div id="user-panel" style="display:none;">
+    <p>তুমি লগইন করেছ:</p>
+    <p id="user-email"></p>
+    <button onclick="logoutUser()">Logout</button>
+  </div>
+
+  <p id="auth-message"></p>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "তোমার_PROJECT_URL";
+const SUPABASE_KEY = "তোমার_PUBLISHABLE_KEY";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+async function signUpUser() {
+  const email = document.getElementById("auth-email").value.trim();
+  const password = document.getElementById("auth-password").value;
+
+  if (!email || password.length < 6) {
+    showAuthMessage("সঠিক ইমেইল ও কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দাও।");
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  if (error) {
+    showAuthMessage(error.message);
+    return;
+  }
+
+  showAuthMessage(
+    data.session
+      ? "অ্যাকাউন্ট তৈরি হয়েছে!"
+      : "অ্যাকাউন্ট তৈরি হয়েছে। ইমেইল চেক করে ভেরিফাই করো।"
+  );
+  await updateAuthUI();
+}
+
+async function loginUser() {
+  const email = document.getElementById("auth-email").value.trim();
+  const password = document.getElementById("auth-password").value;
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    showAuthMessage(error.message);
+    return;
+  }
+
+  showAuthMessage("লগইন সফল হয়েছে!");
+  await updateAuthUI();
+}
+
+async function logoutUser() {
+  const { error } = await supabaseClient.auth.signOut();
+  if (error) {
+    showAuthMessage(error.message);
+    return;
+  }
+  showAuthMessage("লগআউট হয়েছে।");
+  await updateAuthUI();
+}
+
+function showAuthMessage(message) {
+  document.getElementById("auth-message").textContent = message;
+}
+
+async function updateAuthUI() {
+  const { data } = await supabaseClient.auth.getUser();
+  const user = data.user;
+
+  document.getElementById("auth-form").style.display =
+    user ? "none" : "block";
+
+  document.getElementById("user-panel").style.display =
+    user ? "block" : "none";
+
+  document.getElementById("user-email").textContent =
+    user ? user.email : "";
+}
+
+supabaseClient.auth.onAuthStateChange(() => {
+  updateAuthUI();
+});
+
+updateAuthUI();
+</script>
+
 </body>
 </html>

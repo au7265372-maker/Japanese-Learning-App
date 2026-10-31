@@ -273,5 +273,73 @@ function addLearnedWord() {
 
 updateProgress();
 </script>
+<section id="kana-quiz" style="margin:20px;padding:20px;background:#f0f4ff;border-radius:16px;">
+  <h2>🎌 হিরাগানা কুইজ</h2>
+  <p id="quiz-question">প্রশ্ন শুরু করতে নিচের বাটনে চাপো।</p>
+  <div id="quiz-options"></div>
+  <p id="quiz-result"></p>
+  <button onclick="startKanaQuiz()">কুইজ শুরু করো</button>
+  <p id="quiz-score"></p>
+</section>
+
+<script>
+const kanaQuestions = [
+  {q:"あ এর উচ্চারণ কী?", a:["আ","ই","উ","এ"], correct:"আ"},
+  {q:"き এর উচ্চারণ কী?", a:["কা","কি","কু","কে"], correct:"কি"},
+  {q:"ぬ এর উচ্চারণ কী?", a:["নে","নু","না","নি"], correct:"নু"},
+  {q:"ふ এর উচ্চারণ কী?", a:["হু","ফু","ফা","ফি"], correct:"ফু"},
+  {q:"も এর উচ্চারণ কী?", a:["মা","মি","মো","মু"], correct:"মো"}
+];
+
+let quizIndex = 0;
+let quizScore = 0;
+
+function startKanaQuiz() {
+  quizIndex = 0;
+  quizScore = 0;
+  document.getElementById("quiz-score").textContent = "";
+  showKanaQuestion();
+}
+
+function showKanaQuestion() {
+  if (quizIndex >= kanaQuestions.length) {
+    document.getElementById("quiz-question").textContent = "কুইজ শেষ!";
+    document.getElementById("quiz-options").innerHTML = "";
+    document.getElementById("quiz-result").textContent = "";
+    document.getElementById("quiz-score").textContent =
+      "তোমার নম্বর: " + quizScore + " / 5";
+    return;
+  }
+
+  const q = kanaQuestions[quizIndex];
+  document.getElementById("quiz-question").textContent =
+    (quizIndex + 1) + ". " + q.q;
+  document.getElementById("quiz-result").textContent = "";
+
+  document.getElementById("quiz-options").innerHTML = q.a.map(option =>
+    `<button style="margin:5px;padding:10px;" onclick="answerKana('${option}')">${option}</button>`
+  ).join("");
+}
+
+function answerKana(answer) {
+  const q = kanaQuestions[quizIndex];
+  if (answer === q.correct) {
+    quizScore++;
+    document.getElementById("quiz-result").textContent = "✅ সঠিক উত্তর!";
+  } else {
+    document.getElementById("quiz-result").textContent =
+      "❌ সঠিক উত্তর: " + q.correct;
+  }
+
+  document.getElementById("quiz-options").innerHTML =
+    '<button onclick="nextKanaQuestion()">পরের প্রশ্ন</button>';
+}
+
+function nextKanaQuestion() {
+  quizIndex++;
+  showKanaQuestion();
+}
+</script>
+
 </body>
 </html>

@@ -1,1 +1,427 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Japanese Learning App</title>
+<style>
+:root {
+  --green:#58cc02;
+  --dark:#269b00;
+  --bg:#f7f9fc;
+  --text:#263238;
+  --muted:#718096;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding-bottom:85px;
+}
+header {
+  background:var(--green);
+  color:white;
+  padding:22px 18px;
+  border-radius:0 0 25px 25px;
+}
+header h1 {margin:0;font-size:24px}
+header p {margin:8px 0 0}
+.container {max-width:600px;margin:auto;padding:16px}
+.card {
+  background:white;
+  padding:17px;
+  border:1px solid #e5eaf0;
+  border-radius:17px;
+  margin:13px 0;
+  box-shadow:0 3px 8px #00000008;
+}
+h2 {font-size:20px;margin:5px 0 13px}
+h3 {margin:5px 0}
+.muted {color:var(--muted);font-size:14px}
+.progress {
+  height:12px;background:#e5eaf0;
+  border-radius:20px;overflow:hidden;margin:12px 0;
+}
+.progress div {
+  height:100%;width:0;background:var(--green);
+}
+button {
+  border:0;border-radius:12px;
+  background:var(--green);color:white;
+  padding:12px 16px;font-weight:bold;
+  font-size:15px;cursor:pointer;
+}
+button:active {transform:scale(.97)}
+.secondary {background:#edf2f7;color:#334155}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.kana {
+  background:white;border:1px solid #e4e9ef;
+  border-radius:13px;padding:13px 5px;
+  text-align:center;cursor:pointer;
+}
+.kana b {font-size:29px;display:block}
+.kana span {font-size:13px;color:var(--muted)}
+.lesson {
+  display:flex;align-items:center;gap:14px;
+  border:1px solid #e5eaf0;background:white;
+  border-radius:16px;padding:15px;margin:10px 0;
+}
+.lesson-icon {
+  background:#e8f8dc;border-radius:14px;
+  padding:13px;font-size:25px;
+}
+.lesson-info {flex:1}
+nav {
+  position:fixed;bottom:0;left:0;right:0;
+  display:flex;justify-content:space-around;
+  background:white;border-top:1px solid #e5eaf0;
+  padding:9px 2px calc(9px + env(safe-area-inset-bottom));
+  z-index:5;
+}
+nav button {
+  background:white;color:#64748b;
+  padding:7px 5px;font-size:11px;
+}
+nav button.active {color:var(--dark)}
+nav span {display:block;font-size:21px;margin-bottom:3px}
+.hidden {display:none!important}
+.big-kana {font-size:75px;text-align:center;margin:18px}
+.option {
+  display:block;width:100%;margin:9px 0;
+  background:#edf2f7;color:#263238;
+  text-align:left;
+}
+#message {font-weight:bold;margin:12px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🇯🇵 Japanese Learning</h1>
+  <p>প্রতিদিন একটু একটু করে জাপানি শিখি!</p>
+</header>
+
+<main class="container">
+
+<section id="home">
+  <div class="card">
+    <h2>こんにちは！ স্বাগতম</h2>
+    <p>আজ জাপানি শেখার জন্য প্রস্তুত?</p>
+    <p>⭐ মোট পয়েন্ট: <b id="xp">0</b></p>
+    <p>🔥 শেখা অক্ষর: <b id="learned">0</b></p>
+    <div class="progress"><div id="mainProgress"></div></div>
+    <p class="muted" id="progressText">শেখা শুরু করো!</p>
+  </div>
+
+  <h2>তোমার শেখার পথ</h2>
+  <div class="lesson">
+    <div class="lesson-icon">あ</div>
+    <div class="lesson-info">
+      <h3>হিরাগানা</h3>
+      <p class="muted">জাপানির প্রথম বর্ণমালা</p>
+    </div>
+    <button onclick="showPage('hiragana')">শুরু</button>
+  </div>
+  <div class="lesson">
+    <div class="lesson-icon">ア</div>
+    <div class="lesson-info">
+      <h3>কাতাকানা</h3>
+      <p class="muted">দ্বিতীয় বর্ণমালা</p>
+    </div>
+    <button onclick="showPage('katakana')">শুরু</button>
+  </div>
+  <div class="lesson">
+    <div class="lesson-icon">📚</div>
+    <div class="lesson-info">
+      <h3>শব্দভান্ডার</h3>
+      <p class="muted">প্রতিদিনের জাপানি শব্দ</p>
+    </div>
+    <button onclick="showPage('words')">শুরু</button>
+  </div>
+  <div class="lesson">
+    <div class="lesson-icon">📝</div>
+    <div class="lesson-info">
+      <h3>পরীক্ষা</h3>
+      <p class="muted">নিজের জ্ঞান যাচাই করো</p>
+    </div>
+    <button onclick="showPage('quiz')">শুরু</button>
+  </div>
+</section>
+
+<section id="hiragana" class="hidden">
+  <h2>あ হিরাগানা</h2>
+  <p class="muted">অক্ষরে চাপ দিলে উচ্চারণ শুনতে পাবে।</p>
+  <div id="hiraganaGrid" class="grid"></div>
+</section>
+
+<section id="katakana" class="hidden">
+  <h2>ア কাতাকানা</h2>
+  <p class="muted">অক্ষরে চাপ দিলে উচ্চারণ শুনতে পাবে।</p>
+  <div id="katakanaGrid" class="grid"></div>
+</section>
+
+<section id="words" class="hidden">
+  <h2>📚 জাপানি শব্দভান্ডার</h2>
+  <div id="wordList"></div>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="card">
+    <h2>📝 জাপানি পরীক্ষা</h2>
+    <p id="quizCount">প্রশ্ন শুরু করো</p>
+    <div class="big-kana" id="quizKana">あ</div>
+    <div id="quizOptions"></div>
+    <p id="message"></p>
+    <button id="nextBtn" class="hidden" onclick="nextQuestion()">পরের প্রশ্ন</button>
+    <button id="startBtn" onclick="startQuiz()">পরীক্ষা শুরু</button>
+    <h3 id="quizScore"></h3>
+  </div>
+</section>
+
+<section id="progress" class="hidden">
+  <h2>🏆 আমার অগ্রগতি</h2>
+  <div class="card">
+    <h3>⭐ মোট পয়েন্ট</h3>
+    <h2 id="progressXP">0</h2>
+  </div>
+  <div class="card">
+    <h3>📖 শেখা অক্ষর</h3>
+    <h2 id="progressLearned">0</h2>
+  </div>
+  <div class="card">
+    <h3>📝 সম্পন্ন পরীক্ষা</h3>
+    <h2 id="quizTotal">0</h2>
+  </div>
+</section>
+
+<section id="profile" class="hidden">
+  <h2>👤 আমার প্রোফাইল</h2>
+  <div class="card">
+    <p>তোমার নাম</p>
+    <input id="studentName" placeholder="নাম লিখো"
+      style="padding:12px;width:100%;border:1px solid #ddd;border-radius:10px">
+    <br><br>
+    <button onclick="saveName()">নাম সংরক্ষণ</button>
+    <p id="nameMessage"></p>
+  </div>
+  <div class="card">
+    <h3>Japanese Learning App</h3>
+    <p class="muted">জাপানি শেখার সহজ সঙ্গী।</p>
+    <p>Version 1.0</p>
+  </div>
+</section>
+
+</main>
+
+<nav>
+  <button class="active" onclick="showPage('home',this)"><span>🏠</span>Home</button>
+  <button onclick="showPage('hiragana',this)"><span>あ</span>Hiragana</button>
+  <button onclick="showPage('katakana',this)"><span>ア</span>Katakana</button>
+  <button onclick="showPage('quiz',this)"><span>📝</span>Quiz</button>
+  <button onclick="showPage('progress',this)"><span>🏆</span>Progress</button>
+  <button onclick="showPage('profile',this)"><span>👤</span>Profile</button>
+</nav>
+
+<script>
+const hiragana = [
+["あ","আ"],["い","ই"],["う","উ"],["え","এ"],["お","ও"],
+["か","কা"],["き","কি"],["く","কু"],["け","কে"],["こ","কো"],
+["さ","সা"],["し","শি"],["す","সু"],["せ","সে"],["そ","সো"],
+["た","তা"],["ち","চি"],["つ","ৎসু"],["て","তে"],["と","তো"],
+["な","না"],["に","নি"],["ぬ","নু"],["ね","নে"],["の","নো"],
+["は","হা"],["ひ","হি"],["ふ","ফু"],["へ","হে"],["ほ","হো"],
+["ま","মা"],["み","মি"],["む","মু"],["め","মে"],["も","মো"],
+["や","ইয়া"],["ゆ","ইউ"],["よ","ইয়ো"],
+["ら","রা"],["り","রি"],["る","রু"],["れ","রে"],["ろ","রো"],
+["わ","ওয়া"],["を","ও"],["ん","ন"]
+];
+
+const katakana = [
+["ア","আ"],["イ","ই"],["ウ","উ"],["エ","এ"],["オ","ও"],
+["カ","কা"],["キ","কি"],["ク","কু"],["ケ","কে"],["コ","কো"],
+["サ","সা"],["シ","শি"],["ス","সু"],["セ","সে"],["ソ","সো"],
+["タ","তা"],["チ","চি"],["ツ","ৎসু"],["テ","তে"],["ト","তো"],
+["ナ","না"],["ニ","নি"],["ヌ","নু"],["ネ","নে"],["ノ","নো"],
+["ハ","হা"],["ヒ","হি"],["フ","ফু"],["ヘ","হে"],["ホ","হো"],
+["マ","মা"],["ミ","মি"],["ム","মু"],["メ","মে"],["モ","মো"],
+["ヤ","ইয়া"],["ユ","ইউ"],["ヨ","ইয়ো"],
+["ラ","রা"],["リ","রি"],["ル","রু"],["レ","রে"],["ロ","রো"],
+["ワ","ওয়া"],["ヲ","ও"],["ン","ন"]
+];
+
+const words = [
+["こんにちは","কননিচিওয়া","হ্যালো"],
+["ありがとう","আরিগাতো","ধন্যবাদ"],
+["はい","হাই","হ্যাঁ"],
+["いいえ","ইইএ","না"],
+["みず","মিজু","পানি"],
+["ねこ","নেকো","বিড়াল"],
+["いぬ","ইনু","কুকুর"],
+["がっこう","গাক্কো","বিদ্যালয়"],
+["せんせい","সেনসেই","শিক্ষক"],
+["ともだち","তোমোদাচি","বন্ধু"],
+["おはよう","ওহাইয়ো","সুপ্রভাত"],
+["さようなら","সায়োনারা","বিদায়"]
+];
+
+let learned = JSON.parse(localStorage.getItem("jl_learned") || "[]");
+let xp = Number(localStorage.getItem("jl_xp") || 0);
+let quizTotal = Number(localStorage.getItem("jl_quiz") || 0);
+let studentName = localStorage.getItem("jl_name") || "";
+
+function saveData() {
+  localStorage.setItem("jl_learned",JSON.stringify(learned));
+  localStorage.setItem("jl_xp",xp);
+  localStorage.setItem("jl_quiz",quizTotal);
+  updateProgress();
+}
+
+function updateProgress() {
+  document.getElementById("xp").textContent=xp;
+  document.getElementById("learned").textContent=learned.length;
+  document.getElementById("progressXP").textContent=xp;
+  document.getElementById("progressLearned").textContent=learned.length;
+  document.getElementById("quizTotal").textContent=quizTotal;
+  let percent=Math.round(learned.length/92*100);
+  document.getElementById("mainProgress").style.width=percent+"%";
+  document.getElementById("progressText").textContent=percent+"% অক্ষর শেখা হয়েছে";
+}
+
+function showPage(id,btn) {
+  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  if(btn) btn.classList.add("active");
+  else {
+    document.querySelectorAll("nav button").forEach(b=>{
+      if(b.getAttribute("onclick").includes("'"+id+"'")) b.classList.add("active");
+    });
+  }
+  window.scrollTo(0,0);
+}
+
+function speak(text) {
+  if(!("speechSynthesis" in window)) {
+    alert("এই ব্রাউজারে উচ্চারণ শোনার সুবিধা নেই।");
+    return;
+  }
+  speechSynthesis.cancel();
+  let utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang="ja-JP";
+  utterance.rate=.8;
+  speechSynthesis.speak(utterance);
+}
+
+function renderKana(data,target,type) {
+  document.getElementById(target).innerHTML=data.map((item,i)=>{
+    let id=type+i;
+    let done=learned.includes(id);
+    return `<div class="kana" onclick="learnKana('${id}','${item[0]}')">
+      <b>${item[0]}</b><span>${item[1]} ${done?"✓":""}</span>
+      <div class="muted">🔊 শুনুন</div>
+    </div>`;
+  }).join("");
+}
+
+function learnKana(id,kana) {
+  speak(kana);
+  if(!learned.includes(id)) {
+    learned.push(id);
+    xp+=5;
+    saveData();
+    renderKana(hiragana,"hiraganaGrid","h");
+    renderKana(katakana,"katakanaGrid","k");
+  }
+}
+
+function renderWords() {
+  document.getElementById("wordList").innerHTML=words.map(w=>
+    `<div class="card">
+      <h2>${w[0]}</h2>
+      <p>${w[1]} — ${w[2]}</p>
+      <button onclick="speak('${w[0]}')">🔊 উচ্চারণ শুনুন</button>
+    </div>`
+  ).join("");
+}
+
+let questions=[],index=0,score=0,answered=false;
+
+function startQuiz() {
+  questions=[...hiragana].sort(()=>Math.random()-.5).slice(0,5);
+  index=0;score=0;answered=false;
+  document.getElementById("quizScore").textContent="";
+  document.getElementById("startBtn").classList.add("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  answered=false;
+  let q=questions[index];
+  document.getElementById("quizCount").textContent="প্রশ্ন "+(index+1)+" / 5";
+  document.getElementById("quizKana").textContent=q[0];
+  document.getElementById("message").textContent="";
+  document.getElementById("nextBtn").classList.add("hidden");
+  let options=[q[1],...hiragana.filter(x=>x[1]!==q[1]).sort(()=>Math.random()-.5).slice(0,3).map(x=>x[1])].sort(()=>Math.random()-.5);
+  document.getElementById("quizOptions").innerHTML=options.map(o=>
+    `<button class="option" onclick="answerQuestion('${o.replace(/'/g,"\\'")}')">${o}</button>`
+  ).join("");
+}
+
+function answerQuestion(answer) {
+  if(answered)return;
+  answered=true;
+  let correct=questions[index][1];
+  if(answer===correct) {
+    score++;
+    xp+=10;
+    document.getElementById("message").textContent="✅ সঠিক উত্তর! +১০ পয়েন্ট";
+  } else {
+    document.getElementById("message").textContent="❌ সঠিক উত্তর: "+correct;
+  }
+  saveData();
+  document.getElementById("nextBtn").classList.remove("hidden");
+  document.querySelectorAll("#quizOptions button").forEach(b=>b.disabled=true);
+}
+
+function nextQuestion() {
+  index++;
+  if(index<5) showQuestion();
+  else {
+    quizTotal++;
+    saveData();
+    document.getElementById("quizKana").textContent="🎉";
+    document.getElementById("quizOptions").innerHTML="";
+    document.getElementById("message").textContent="পরীক্ষা শেষ!";
+    document.getElementById("nextBtn").classList.add("hidden");
+    document.getElementById("quizScore").textContent="তোমার নম্বর: "+score+" / 5";
+    document.getElementById("startBtn").classList.remove("hidden");
+  }
+}
+
+function saveName() {
+  let name=document.getElementById("studentName").value.trim();
+  if(!name) {
+    document.getElementById("nameMessage").textContent="আগে তোমার নাম লেখো।";
+    return;
+  }
+  studentName=name;
+  localStorage.setItem("jl_name",name);
+  document.getElementById("nameMessage").textContent="নাম সংরক্ষণ হয়েছে!";
+}
+
+renderKana(hiragana,"hiraganaGrid","h");
+renderKana(katakana,"katakanaGrid","k");
+renderWords();
+document.getElementById("studentName").value=studentName;
+updateProgress();
+</script>
+</body>
+</html>
+

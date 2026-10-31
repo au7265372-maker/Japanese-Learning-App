@@ -517,7 +517,7 @@ async function updateAuthUI() {
     user ? user.email : "";
 }
 
-supabaseClient.auth.onAuthStateChange(() => {
+
   updateAuthUI();
 });
 

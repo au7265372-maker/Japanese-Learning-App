@@ -1,1 +1,266 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#b91c35">
+<title>Japanese Learning | 日本語学習</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6fb;color:#222}
+header{background:linear-gradient(135deg,#a80f2d,#e83e52);color:white;padding:28px 18px;border-radius:0 0 25px 25px}
+header h1{font-size:28px;margin:5px 0}
+header p{opacity:.9}
+nav{display:flex;gap:9px;overflow:auto;padding:14px;background:white;position:sticky;top:0;z-index:5}
+nav button{white-space:nowrap;border:0;background:#f1e8eb;padding:11px 14px;border-radius:20px}
+button{cursor:pointer}
+main{padding:16px;max-width:850px;margin:auto}
+.panel{background:white;padding:19px;border-radius:17px;margin:14px 0;box-shadow:0 3px 14px #0000000a}
+h2{font-size:20px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tile{background:#fff2f4;padding:17px;border-radius:14px;text-align:center}
+.tile strong{font-size:25px;color:#b91c35}
+.primary{background:#c51e3b;color:white;border:0;padding:12px 18px;border-radius:10px}
+.secondary{background:#f2e5e9;color:#a31530;border:0;padding:11px;border-radius:9px}
+input,select{padding:12px;border:1px solid #ddd;border-radius:9px;width:100%;margin:8px 0}
+.progress{height:10px;background:#eee;border-radius:10px;overflow:hidden}
+.progress div{height:100%;background:#d52a49;width:0}
+.letters{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.letter{background:#fff1f3;border:0;border-radius:10px;padding:13px 2px;font-size:24px;color:#a31530}
+.small{font-size:13px;color:#777}
+.hide{display:none}
+footer{text-align:center;padding:25px;color:#777}
+</style>
+</head>
+<body>
+
+<header>
+<div>🇯🇵 日本語学習</div>
+<h1>Japanese Learning</h1>
+<p>বাংলা ভাষায় সহজে জাপানি শিখুন</p>
+<p>প্রতিদিন শিখুন, প্রতিদিন এগিয়ে যান!</p>
+</header>
+
+<nav>
+<button onclick="show('home')">হোম</button>
+<button onclick="show('hiragana')">হিরাগানা</button>
+<button onclick="show('katakana')">কাতাকানা</button>
+<button onclick="show('kanji')">কানজি</button>
+<button onclick="show('vocabulary')">শব্দ</button>
+<button onclick="show('quiz')">পরীক্ষা</button>
+</nav>
+
+<main>
+
+<section id="home">
+<div class="panel">
+<h2>ようこそ! স্বাগতম 👋</h2>
+<p>আজ থেকেই জাপানি ভাষা শেখা শুরু করুন।</p>
+<h3>আপনার শেখার অগ্রগতি</h3>
+<div class="progress"><div id="bar"></div></div>
+<p id="score">শেখা অক্ষর: ০</p>
+</div>
+<h2>শেখার বিভাগ</h2>
+<div class="grid">
+<div class="tile" onclick="show('hiragana')">あ<br>হিরাগানা</div>
+<div class="tile" onclick="show('katakana')">ア<br>কাতাকানা</div>
+<div class="tile" onclick="show('kanji')">日<br>কানজি</div>
+<div class="tile" onclick="show('vocabulary')">言葉<br>শব্দভান্ডার</div>
+<div class="tile" onclick="show('jlpt')">JLPT<br>পরীক্ষার প্রস্তুতি</div>
+<div class="tile" onclick="show('quiz')">📝<br>কুইজ</div>
+</div>
+</section>
+
+<section id="hiragana" class="hide">
+<div class="panel">
+<h2>হিরাগানা (ひらがな)</h2>
+<p>জাপানি ভাষার মৌলিক বর্ণমালা শিখুন।</p>
+<div id="hletters" class="letters"></div>
+</div>
+</section>
+
+<section id="katakana" class="hide">
+<div class="panel">
+<h2>কাতাকানা (カタカナ)</h2>
+<p>বিদেশি শব্দ লেখার জন্য ব্যবহৃত হয়।</p>
+<div id="kletters" class="letters"></div>
+</div>
+</section>
+
+<section id="kanji" class="hide">
+<div class="panel">
+<h2>কানজি (漢字)</h2>
+<div class="grid" id="kanjis"></div>
+</div>
+</section>
+
+<section id="vocabulary" class="hide">
+<div class="panel">
+<h2>দৈনন্দিন জাপানি শব্দ</h2>
+<div id="words"></div>
+</div>
+</section>
+
+<section id="jlpt" class="hide">
+<div class="panel">
+<h2>JLPT কোর্স</h2>
+<p>আপনার শেখার স্তর নির্বাচন করুন।</p>
+<div class="grid">
+<div class="tile">N5<br><small>প্রাথমিক</small></div>
+<div class="tile">N4<br><small>মৌলিক</small></div>
+<div class="tile">N3<br><small>মধ্যম</small></div>
+<div class="tile">N2<br><small>উচ্চ মধ্যম</small></div>
+<div class="tile">N1<br><small>উন্নত</small></div>
+</div>
+<p class="small">প্রতিটি স্তরের পাঠ ও অনুশীলন ধাপে ধাপে যোগ করা হবে।</p>
+</div>
+</section>
+
+<section id="quiz" class="hide">
+<div class="panel">
+<h2>জাপানি পরীক্ষা 📝</h2>
+<p id="question">あ এর উচ্চারণ কী?</p>
+<div id="answers"></div>
+<p id="result"></p>
+<p id="quizscore">স্কোর: ০</p>
+<button class="primary" onclick="nextQuestion()">পরবর্তী প্রশ্ন</button>
+</div>
+</section>
+
+</main>
+
+<footer>
+<p>日本語学習 | Japanese Learning</p>
+<p>শিখুন, অনুশীলন করুন, এগিয়ে যান।</p>
+</footer>
+
+<script>
+const hira=[
+["あ","আ"],["い","ই"],["う","উ"],["え","এ"],["お","ও"],
+["か","কা"],["き","কি"],["く","কু"],["け","কে"],["こ","কো"],
+["さ","সা"],["し","শি"],["す","সু"],["せ","সে"],["そ","সো"],
+["た","তা"],["ち","চি"],["つ","ৎসু"],["て","তে"],["と","তো"],
+["な","না"],["に","নি"],["ぬ","নু"],["ね","নে"],["の","নো"],
+["は","হা"],["ひ","হি"],["ふ","ফু"],["へ","হে"],["ほ","হো"],
+["ま","মা"],["み","মি"],["む","মু"],["め","মে"],["も","মো"],
+["や","ইয়া"],["ゆ","ইউ"],["よ","ইয়ো"],
+["ら","রা"],["り","রি"],["る","রু"],["れ","রে"],["ろ","রো"],
+["わ","ওয়া"],["を","ও"],["ん","ন"]
+];
+const kata=[
+["ア","আ"],["イ","ই"],["ウ","উ"],["エ","এ"],["オ","ও"],
+["カ","কা"],["キ","কি"],["ク","কু"],["ケ","কে"],["コ","কো"],
+["サ","সা"],["シ","শি"],["ス","সু"],["セ","সে"],["ソ","সো"],
+["タ","তা"],["チ","চি"],["ツ","ৎসু"],["テ","তে"],["ト","তো"],
+["ナ","না"],["ニ","নি"],["ヌ","নু"],["ネ","নে"],["ノ","নো"],
+["ハ","হা"],["ヒ","হি"],["フ","ফু"],["ヘ","হে"],["ホ","হো"],
+["マ","মা"],["ミ","মি"],["ム","মু"],["メ","মে"],["モ","মো"],
+["ヤ","ইয়া"],["ユ","ইউ"],["ヨ","ইয়ো"],
+["ラ","রা"],["リ","রি"],["ル","রু"],["レ","রে"],["ロ","রো"],
+["ワ","ওয়া"],["ヲ","ও"],["ン","ন"]
+];
+
+function renderLetters(data,id){
+ document.getElementById(id).innerHTML=data.map((x,i)=>
+ `<button class="letter" onclick="learn('${id}',${i})">${x[0]}</button>`
+ ).join('');
+}
+renderLetters(hira,'hletters');
+renderLetters(kata,'kletters');
+
+let learned=JSON.parse(localStorage.getItem('learned')||'[]');
+function learn(id,i){
+ let data=id==='hletters'?hira: kata;
+ let item=id+i;
+ if(!learned.includes(item)){
+ learned.push(item);
+ localStorage.setItem('learned',JSON.stringify(learned));
+ }
+ updateProgress();
+ speak(data[i][0]);
+ alert(data[i][0]+' = '+data[i][1]);
+}
+function updateProgress(){
+ document.getElementById('score').innerText='শেখা অক্ষর: '+learned.length;
+ document.getElementById('bar').style.width=Math.min(100,learned.length/92*100)+'%';
+}
+updateProgress();
+
+const kanjis=[
+["日","সূর্য / দিন","ひ"],
+["月","চাঁদ / মাস","つき"],
+["山","পাহাড়","やま"],
+["川","নদী","かわ"],
+["水","পানি","みず"],
+["火","আগুন","ひ"],
+["木","গাছ","き"],
+["人","মানুষ","ひと"]
+];
+document.getElementById('kanjis').innerHTML=kanjis.map(k=>
+`<div class="tile"><strong>${k[0]}</strong><p>${k[1]}</p><small>${k[2]}</small></div>`).join('');
+
+const words=[
+["こんにちは","কননিচিওয়া","হ্যালো"],
+["ありがとう","আরিগাতো","ধন্যবাদ"],
+["おはよう","ওহায়ো","সুপ্রভাত"],
+["さようなら","সায়োনারা","বিদায়"],
+["はい","হাই","হ্যাঁ"],
+["いいえ","ইইএ","না"],
+["すみません","সুমিমাসেন","দুঃখিত / মাফ করবেন"],
+["わたし","ওয়াতাশি","আমি"]
+];
+document.getElementById('words').innerHTML=words.map(w=>
+`<div class="tile"><strong>${w[0]}</strong><p>${w[1]} — ${w[2]}</p><button class="secondary" onclick="speak('${w[0]}')">🔊 শুনুন</button></div>`
+).join('');
+
+function speak(t){
+ if('speechSynthesis' in window){
+ let u=new SpeechSynthesisUtterance(t);
+ u.lang='ja-JP';
+ speechSynthesis.speak(u);
+ }else alert('এই ব্রাউজারে অডিও সুবিধা নেই।');
+}
+
+let questions=[
+["あ","আ",["ই","আ","উ"]],
+["い","ই",["এ","ও","ই"]],
+["う","উ",["উ","আ","ই"]],
+["か","কা",["কি","কা","কু"]],
+["し","শি",["সি","শি","সু"]],
+["ね","নে",["নু","না","নে"]],
+["み","মি",["মে","মি","মা"]],
+["そ","সো",["সো","শি","সা"]]
+];
+let qi=0,points=0;
+function loadQuestion(){
+ let q=questions[qi];
+ document.getElementById('question').innerText=q[0]+' এর উচ্চারণ কী?';
+ document.getElementById('answers').innerHTML=q[2].map(a=>
+ `<button class="secondary" onclick="answer('${a}')">${a}</button>`
+ ).join('');
+ document.getElementById('result').innerText='';
+}
+function answer(a){
+ let q=questions[qi];
+ let r=document.getElementById('result');
+ if(r.innerText)return;
+ if(a===q[1]){points++;r.innerText='সঠিক উত্তর! 🎉';}
+ else r.innerText='সঠিক উত্তর: '+q[1];
+ document.getElementById('quizscore').innerText='স্কোর: '+points;
+}
+function nextQuestion(){
+ qi=(qi+1)%questions.length;
+ loadQuestion();
+}
+loadQuestion();
+
+function show(id){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hide'));
+ document.getElementById(id).classList.remove('hide');
+ window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
+
